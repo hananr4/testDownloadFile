@@ -39,8 +39,7 @@ public sealed class testDownloadFileModule : ModuleBase {
     }
     private void Application_ObjectSpaceCreated(object sender, ObjectSpaceCreatedEventArgs e)
     {
-        NonPersistentObjectSpace nonPersistentObjectSpace = e.ObjectSpace as NonPersistentObjectSpace;
-        if (nonPersistentObjectSpace != null)
+        if (e.ObjectSpace is NonPersistentObjectSpace nonPersistentObjectSpace)
         {
             nonPersistentObjectSpace.ObjectsGetting += NonPersistentObjectSpace_ObjectsGetting;
             nonPersistentObjectSpace.ObjectByKeyGetting += NonPersistentObjectSpace_ObjectByKeyGetting;
@@ -53,10 +52,12 @@ public sealed class testDownloadFileModule : ModuleBase {
         if (e.ObjectType == typeof(ExportXmlZipParameter))
         {
             IObjectSpace objectSpace = (IObjectSpace)sender;
-            BindingList<ExportXmlZipParameter> objects = new BindingList<ExportXmlZipParameter>();
-            objects.AllowNew = true;
-            objects.AllowEdit = true;
-            objects.AllowRemove = true;
+            var objects = new BindingList<ExportXmlZipParameter>
+            {
+                AllowNew = true,
+                AllowEdit = true,
+                AllowRemove = true
+            };
             foreach (ExportXmlZipParameter obj in ObjectsCache.Values)
             {
                 objects.Add(objectSpace.GetObject<ExportXmlZipParameter>(obj));
@@ -69,8 +70,7 @@ public sealed class testDownloadFileModule : ModuleBase {
         IObjectSpace objectSpace = (IObjectSpace)sender;
         if (e.ObjectType == typeof(ExportXmlZipParameter))
         {
-            ExportXmlZipParameter obj;
-            if (ObjectsCache.TryGetValue((Guid)e.Key, out obj))
+            if (ObjectsCache.TryGetValue((Guid)e.Key, out ExportXmlZipParameter obj))
             {
                 e.Object = objectSpace.GetObject(obj);
             }
