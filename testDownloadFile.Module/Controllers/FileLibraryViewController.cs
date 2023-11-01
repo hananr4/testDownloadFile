@@ -62,7 +62,6 @@ public partial class FileLibraryViewController : ViewController
         var filename = "documents.zip";
         using var stream = new MemoryStream(contentZip);
         file.LoadFromStream(filename, stream);
-        file.SaveToStream(stream);
         param.File = file;
         os.CommitChanges();
 

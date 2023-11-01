@@ -12,6 +12,7 @@ using DevExpress.ExpressApp.Model.DomainLogics;
 using DevExpress.ExpressApp.Model.NodeGenerators;
 using DevExpress.Xpo;
 using DevExpress.ExpressApp.Xpo;
+using testDownloadFile.Module.Parameters;
 
 namespace testDownloadFile.Module;
 
@@ -30,10 +31,78 @@ public sealed class testDownloadFileModule : ModuleBase {
     }
     public override void Setup(XafApplication application) {
         base.Setup(application);
-        // Manage various aspects of the application UI and behavior at the module level.
+        application.SetupComplete += Application_SetupComplete;
     }
+    private void Application_SetupComplete(object sender, EventArgs e)
+    {
+        Application.ObjectSpaceCreated += Application_ObjectSpaceCreated;
+    }
+    private void Application_ObjectSpaceCreated(object sender, ObjectSpaceCreatedEventArgs e)
+    {
+        NonPersistentObjectSpace nonPersistentObjectSpace = e.ObjectSpace as NonPersistentObjectSpace;
+        if (nonPersistentObjectSpace != null)
+        {
+            nonPersistentObjectSpace.ObjectsGetting += NonPersistentObjectSpace_ObjectsGetting;
+            nonPersistentObjectSpace.ObjectByKeyGetting += NonPersistentObjectSpace_ObjectByKeyGetting;
+            nonPersistentObjectSpace.Committing += NonPersistentObjectSpace_Committing;
+        }
+    }
+
+    private void NonPersistentObjectSpace_ObjectsGetting(Object sender, ObjectsGettingEventArgs e)
+    {
+        if (e.ObjectType == typeof(ExportXmlZipParameter))
+        {
+            IObjectSpace objectSpace = (IObjectSpace)sender;
+            BindingList<ExportXmlZipParameter> objects = new BindingList<ExportXmlZipParameter>();
+            objects.AllowNew = true;
+            objects.AllowEdit = true;
+            objects.AllowRemove = true;
+            foreach (ExportXmlZipParameter obj in ObjectsCache.Values)
+            {
+                objects.Add(objectSpace.GetObject<ExportXmlZipParameter>(obj));
+            }
+            e.Objects = objects;
+        }
+    }
+    private void NonPersistentObjectSpace_ObjectByKeyGetting(object sender, ObjectByKeyGettingEventArgs e)
+    {
+        IObjectSpace objectSpace = (IObjectSpace)sender;
+        if (e.ObjectType == typeof(ExportXmlZipParameter))
+        {
+            ExportXmlZipParameter obj;
+            if (ObjectsCache.TryGetValue((Guid)e.Key, out obj))
+            {
+                e.Object = objectSpace.GetObject(obj);
+            }
+        }
+    }
+    private void NonPersistentObjectSpace_Committing(Object sender, CancelEventArgs e)
+    {
+        IObjectSpace objectSpace = (IObjectSpace)sender;
+        foreach (Object obj in objectSpace.ModifiedObjects)
+        {
+            ExportXmlZipParameter myobj = obj as ExportXmlZipParameter;
+            if (obj != null)
+            {
+                if (objectSpace.IsNewObject(obj))
+                {
+                    ObjectsCache.Add(myobj.Oid, myobj);
+                }
+                else if (objectSpace.IsDeletedObject(obj))
+                {
+                    ObjectsCache.Remove(myobj.Oid);
+                }
+            }
+        }
+    }
+
     public override void CustomizeTypesInfo(ITypesInfo typesInfo) {
         base.CustomizeTypesInfo(typesInfo);
         CalculatedPersistentAliasHelper.CustomizeTypesInfo(typesInfo);
     }
+
+
+    private static Dictionary<Guid, ExportXmlZipParameter> ObjectsCache { get; }
+        = new Dictionary<Guid, ExportXmlZipParameter>();
+
 }

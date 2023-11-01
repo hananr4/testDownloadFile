@@ -13,6 +13,11 @@ public class testDownloadFileBlazorApplication : BlazorApplication {
         CheckCompatibilityType = DevExpress.ExpressApp.CheckCompatibilityType.DatabaseSchema;
         DatabaseVersionMismatch += testDownloadFileBlazorApplication_DatabaseVersionMismatch;
     }
+    protected override void CreateDefaultObjectSpaceProvider(CreateCustomObjectSpaceProviderEventArgs args)
+    {
+        args.ObjectSpaceProviders.Add(new NonPersistentObjectSpaceProvider(TypesInfo, null));
+    }
+
     protected override void OnSetupStarted() {
         base.OnSetupStarted();
 #if DEBUG
