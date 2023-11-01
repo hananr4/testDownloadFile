@@ -15,6 +15,7 @@ public class testDownloadFileBlazorApplication : BlazorApplication {
     }
     protected override void CreateDefaultObjectSpaceProvider(CreateCustomObjectSpaceProviderEventArgs args)
     {
+        base.CreateDefaultObjectSpaceProvider(args);
         args.ObjectSpaceProviders.Add(new NonPersistentObjectSpaceProvider(TypesInfo, null));
     }
 
