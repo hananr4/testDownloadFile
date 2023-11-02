@@ -1,11 +1,13 @@
-﻿using DevExpress.ExpressApp.ApplicationBuilder;
+﻿using Microsoft.AspNetCore.Components.Server.Circuits;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
+using DevExpress.ExpressApp.ApplicationBuilder;
 using DevExpress.ExpressApp.Blazor.ApplicationBuilder;
 using DevExpress.ExpressApp.Blazor.Services;
-using DevExpress.Persistent.Base;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Components.Server.Circuits;
-using DevExpress.ExpressApp.Xpo;
+using DevExpress.ExpressApp.Core;
+
 using testDownloadFile.Blazor.Server.Services;
+using testDownloadFile.Module.Services;
 
 namespace testDownloadFile.Blazor.Server;
 
@@ -20,6 +22,8 @@ public class Startup {
     // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
     public void ConfigureServices(IServiceCollection services) {
         services.AddSingleton(typeof(Microsoft.AspNetCore.SignalR.HubConnectionHandler<>), typeof(ProxyHubConnectionHandler<>));
+        services.AddSingleton<NonPersistentObjectStorageService>();
+        services.TryAddEnumerable(ServiceDescriptor.Scoped<IObjectSpaceCustomizer,NonPersistentObjectSpaceCustomizer>());
 
         services.AddRazorPages();
         services.AddServerSideBlazor();
