@@ -49,18 +49,18 @@ public sealed class testDownloadFileModule : ModuleBase {
 
     private void NonPersistentObjectSpace_ObjectsGetting(Object sender, ObjectsGettingEventArgs e)
     {
-        if (e.ObjectType == typeof(ExportXmlZipParameter))
+        if (e.ObjectType == typeof(ExportZipParameter))
         {
             IObjectSpace objectSpace = (IObjectSpace)sender;
-            var objects = new BindingList<ExportXmlZipParameter>
+            var objects = new BindingList<ExportZipParameter>
             {
                 AllowNew = true,
                 AllowEdit = true,
                 AllowRemove = true
             };
-            foreach (ExportXmlZipParameter obj in ObjectsCache.Values)
+            foreach (ExportZipParameter obj in ObjectsCache.Values)
             {
-                objects.Add(objectSpace.GetObject<ExportXmlZipParameter>(obj));
+                objects.Add(objectSpace.GetObject<ExportZipParameter>(obj));
             }
             e.Objects = objects;
         }
@@ -68,9 +68,9 @@ public sealed class testDownloadFileModule : ModuleBase {
     private void NonPersistentObjectSpace_ObjectByKeyGetting(object sender, ObjectByKeyGettingEventArgs e)
     {
         IObjectSpace objectSpace = (IObjectSpace)sender;
-        if (e.ObjectType == typeof(ExportXmlZipParameter))
+        if (e.ObjectType == typeof(ExportZipParameter))
         {
-            if (ObjectsCache.TryGetValue((Guid)e.Key, out ExportXmlZipParameter obj))
+            if (ObjectsCache.TryGetValue((Guid)e.Key, out ExportZipParameter obj))
             {
                 e.Object = objectSpace.GetObject(obj);
             }
@@ -81,7 +81,7 @@ public sealed class testDownloadFileModule : ModuleBase {
         IObjectSpace objectSpace = (IObjectSpace)sender;
         foreach (Object obj in objectSpace.ModifiedObjects)
         {
-            ExportXmlZipParameter myobj = obj as ExportXmlZipParameter;
+            ExportZipParameter myobj = obj as ExportZipParameter;
             if (obj != null)
             {
                 if (objectSpace.IsNewObject(obj))
@@ -102,7 +102,7 @@ public sealed class testDownloadFileModule : ModuleBase {
     }
 
 
-    private static Dictionary<Guid, ExportXmlZipParameter> ObjectsCache { get; }
-        = new Dictionary<Guid, ExportXmlZipParameter>();
+    private static Dictionary<Guid, ExportZipParameter> ObjectsCache { get; }
+        = new Dictionary<Guid, ExportZipParameter>();
 
 }

@@ -39,7 +39,7 @@ public class NonPersistentObjectSpaceCustomizer : IObjectSpaceCustomizer
         }
     }
 
-    private void NonPersistentObjectSpace_ObjectsGetting(object? sender, ObjectsGettingEventArgs e)
+    private void NonPersistentObjectSpace_ObjectsGetting(object sender, ObjectsGettingEventArgs e)
     {
         if (typeof(NonPersistentBaseObject).IsAssignableFrom(e.ObjectType))
         {
@@ -59,7 +59,7 @@ public class NonPersistentObjectSpaceCustomizer : IObjectSpaceCustomizer
             e.Objects = objects;
         }
     }
-    private void NonPersistentObjectSpace_ObjectByKeyGetting(object? sender, ObjectByKeyGettingEventArgs e)
+    private void NonPersistentObjectSpace_ObjectByKeyGetting(object sender, ObjectByKeyGettingEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(sender);
         IObjectSpace objectSpace = (IObjectSpace)sender;
@@ -71,7 +71,7 @@ public class NonPersistentObjectSpaceCustomizer : IObjectSpaceCustomizer
             }
         }
     }
-    private void NonPersistentObjectSpace_Committing(object? sender, CancelEventArgs e)
+    private void NonPersistentObjectSpace_Committing(object sender, CancelEventArgs e)
     {
         ArgumentNullException.ThrowIfNull(sender);
         IObjectSpace objectSpace = (IObjectSpace)sender;

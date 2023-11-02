@@ -52,11 +52,11 @@ public partial class FileLibraryViewController : ViewController
 
         var contentZip = HelperZip.GetZipArchive(files);
         
-        var os = Application.CreateObjectSpace(typeof(ExportXmlZipParameter));
+        var os = Application.CreateObjectSpace(typeof(ExportZipParameter));
 
         var os2 = Application.CreateObjectSpace(typeof(FileData));
 
-        var param = os.CreateObject<ExportXmlZipParameter>();
+        var param = os.CreateObject<ExportZipParameter>();
         var file = os2.CreateObject<FileData>();
 
         var filename = "documents.zip";

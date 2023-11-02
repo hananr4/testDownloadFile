@@ -11,17 +11,17 @@ using System.Threading.Tasks;
 namespace testDownloadFile.Module.Parameters;
 
 [DomainComponent]
-public class ExportXmlZipParameter: NonPersistentBaseObject
+public class ExportZipParameter: NonPersistentBaseObject
 {
 
     FileData file;
 
-    public ExportXmlZipParameter()
+    public ExportZipParameter()
     {
 
     }
      
-    public ExportXmlZipParameter(Guid oid) : base(oid)
+    public ExportZipParameter(Guid oid) : base(oid)
     {
 
     }
